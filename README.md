@@ -1,4 +1,4 @@
-#Calculator
+# Calculator
 This is a simple calculator built with javascript.
 
 Here is the link to the project: https://codepen.io/TMTY/full/eYpqJPp
