@@ -16,6 +16,7 @@
 }
 
 .display-area {
+    overflow-x: auto;
     background: rgb(201, 192, 192);
     position: relative;
     padding: 10px;
@@ -24,6 +25,17 @@
     width: 500px;
     height: 100px;
     border: 2px solid black;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+
+.guides {
+    text-align: center;
+    padding-top: 1em;
+
 }
 
 button {

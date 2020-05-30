@@ -1,38 +1,76 @@
 let userInput = document.querySelector(".user-input")
 let resultDisplay = document.querySelector(".result-display")
+let displayArea = document.querySelector(".display-area")
 let calcMemory = {value1: "", value2: "", operatorMemory: ""}
 let result = "";
+let guide = document.querySelector(".guides");
 
+
+
+function updateScroll() {
+    displayArea.scrollLeft = displayArea.scrollWidth
+}
 
 //checks calcMemory to bring out numbers and performs appropriate operation
 function computeResult() {
-    console.log(calcMemory)
-    if (calcMemory.operatorMemory.includes("+")) {
-        result = (parseFloat(calcMemory.value1)) + (parseFloat(calcMemory.value2))
-    } else if ((calcMemory.operatorMemory).includes("-")) {
-        result = (parseFloat(calcMemory.value1)) - (parseFloat(calcMemory.value2))
-    } else if ((calcMemory.operatorMemory).includes("*")) {
-        result = (parseFloat(calcMemory.value1)) * (parseFloat(calcMemory.value2))
-    } else if ((calcMemory.operatorMemory).includes("/")) {
-        result = (parseFloat(calcMemory.value1)) / (parseFloat(calcMemory.value2))
+
+    if (calcMemory.value1 !== "" && calcMemory.operatorMemory !== "" & calcMemory.value2 !== "") {
+        if (calcMemory.operatorMemory.includes("+")) {
+            result = (parseFloat(calcMemory.value1)) + (parseFloat(calcMemory.value2))
+        } else if ((calcMemory.operatorMemory).includes("-")) {
+            result = (parseFloat(calcMemory.value1)) - (parseFloat(calcMemory.value2))
+        } else if ((calcMemory.operatorMemory).includes("*")) {
+            result = (parseFloat(calcMemory.value1)) * (parseFloat(calcMemory.value2))
+        } else if ((calcMemory.operatorMemory).includes("/")) {
+            result = (parseFloat(calcMemory.value1)) / (parseFloat(calcMemory.value2))
+        }
+
+            resultDisplay.innerText = result
+            calcMemory.value1 = result
+            calcMemory.value2 = ""
+            calcMemory.operatorMemory = ""
+    } else if (calcMemory.value1 !== "" && calcMemory.operatorMemory === "" & calcMemory.value2 === "") {
+        resultDisplay.innerText = calcMemory.value1
+    } else if (calcMemory.value1 === "" && calcMemory.operatorMemory !== "" & calcMemory.value2 !== "") {
+        if (calcMemory.operatorMemory.includes("+")) {
+            resultDisplay.innerText = calcMemory.value2;
+            calcMemory.value1 = calcMemory.value2;
+            calcMemory.value2 = "";
+        } else { 
+            calcMemory.operatorMemory = "";
+            calcMemory.value2 = ""
+            userInput.innerText = ""
+            guide.innerText = "Error! Invalid operation. Try again" 
+        }
+    } else if( calcMemory.value1 !== "" && calcMemory.operatorMemory !== "" & calcMemory.value2 === "" ) {
+        guide.innerText = "Please enter a second number"
     }
 
-        resultDisplay.innerText = result
-        calcMemory.value1 = result
-        calcMemory.value2 = ""
-        calcMemory.operatorMemory = ""
+    updateScroll()
 }
 
-console.log("" === undefined)
+
+
 // display and store numbers on-click
 document.querySelectorAll('.number-button').forEach(function(numberButton) {
     numberButton.addEventListener('click', function (){
 
-        if (calcMemory.operatorMemory === ""){
+        guide.innerText = "";
+
+            //empties 
+        if (result !== "" && calcMemory.operatorMemory === "") {
+            result = "";
+            calcMemory.value1 = "";
+            userInput.innerText = "";
+            resultDisplay.innerText = "";
+            calcMemory.value1 = numberButton.innerText;
+        } else if (calcMemory.operatorMemory === ""){
             calcMemory.value1 += numberButton.innerText;
         } else if (calcMemory.operatorMemory !== ""){calcMemory.value2 += numberButton.innerText}
     
         userInput.innerText += numberButton.innerText;
+
+        updateScroll()
     })
 })
 
@@ -40,6 +78,8 @@ document.querySelectorAll('.number-button').forEach(function(numberButton) {
 //(compute previous operation in calcMemory &) display and store operator on-click
 document.querySelectorAll('.operator-button').forEach(function(operatorButton) {
     operatorButton.addEventListener('click', function() {
+        guide.innerText = "";
+
         if (calcMemory.operatorMemory === "" && result !== "") {
             if (operatorButton.innerText.includes('-') && calcMemory.value2 === "") {
                 userInput.innerText = `${result}${operatorButton.innerText}`;
@@ -66,6 +106,8 @@ document.querySelectorAll('.operator-button').forEach(function(operatorButton) {
             userInput.innerText = `${calcMemory.value1}${operatorButton.innerText}`;
             calcMemory.operatorMemory = operatorButton.innerText;
         }
+
+        updateScroll()
     });
 })
 
@@ -96,4 +138,5 @@ document.querySelector('.clear-button').addEventListener('click', function() {
     calcMemory.value2 = "";
     calcMemory.operatorMemory = "";
     resultDisplay.innerText = "";
+    guide.innerText = ""
 })
